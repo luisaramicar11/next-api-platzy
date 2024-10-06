@@ -5,15 +5,15 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import styled from "styled-components";
 import { toast } from "react-toastify";
+import Input from "../../components/UI/Input/Input"
+import Button from "../../components/UI/Button/Button"
 
 // Estilos usando styled-components
 const Container = styled.div`
   max-width: 400px;
   margin: 0 auto;
   padding: 2rem;
-  background-color: #f7f7f7;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const Title = styled.h1`
@@ -25,31 +25,7 @@ const Title = styled.h1`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-`;
-
-const Input = styled.input`
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
-  &:focus {
-    border-color: #0070f3;
-    outline: none;
-  }
-`;
-
-const Button = styled.button`
-  padding: 0.75rem;
-  background-color: #0070f3;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-  &:hover {
-    background-color: #005bb5;
-  }
+  align-items: center;
 `;
 
 const ErrorList = styled.ul`
@@ -110,7 +86,7 @@ const LoginPage = () => {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        <Button type="submit">Login</Button>
+        <Button type="submit" label="Login"/>
       </Form>
 
       {errors.length > 0 && (

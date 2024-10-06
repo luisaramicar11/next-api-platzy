@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Product Management App
 
-## Getting Started
+This is a product management project developed with Next.js, TypeScript, and NextAuth, which includes functionality to handle CRUD operations for products and support for internationalization (i18n) in English and Spanish.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Product CRUD**: Allows you to create, read, update, and delete products.
+- **Authentication**: Support for user authentication using NextAuth.
+- **User Interface**: Utilizes styled-components for custom styling.
+- **Internationalization**: Support for switching between English and Spanish.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technologies Used
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Next.js**: React framework for web applications.
+- **TypeScript**: A superset of JavaScript that adds static typing.
+- **NextAuth**: A library for authentication in Next.js applications.
+- **Styled-components**: A library for CSS in JavaScript styling.
+- **React Toastify**: A library for toast notifications.
+- **Redux Toolkit**: Global state management.
+- **i18n**: Internationalization.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Installation
 
-## Learn More
+1. Clone the repository:
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   git clone <REPOSITORY_URL>
+   cd <REPOSITORY_NAME>
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. Install the dependencies:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   npm install
 
-## Deploy on Vercel
+3. Set up environment variables by creating the .env.local file and adding the following variables:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```bash
+   NEXT_PUBLIC_BACKEND_URL=<URL_DE_TU_BACKEND>
+   NEXTAUTH_SECRET=no-utilizar-esta-apalabra-en-produccion 
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. Start the development server:
+
+   ```bash
+   npm run dev 
+
+5.  Open your browser and visit http://localhost:3000. 
+
+## Usage
+
+- Upon opening the application, you can manage products from the interface.
+- You can change the application's language using the language selector in the upper right corner.

@@ -8,15 +8,16 @@ import { toast } from "react-toastify";
 import { createUser } from "../api/users/route"
 import { IUser, IResponseCreateUser } from "../../types/userInterface"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import Input from "../../components/UI/Input/Input";
+import Button from "../../components/UI/Button/Button";
+import Label from "../../components/UI/Label/Label"
 
 // Estilos usando styled-components
 const Container = styled.div`
   max-width: 600px;
   margin: 0 auto;
   padding: 2rem;
-  background-color: #f7f7f7;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const Title = styled.h1`
@@ -28,36 +29,6 @@ const Title = styled.h1`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-`;
-
-const Label = styled.label`
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-`;
-
-const Input = styled.input`
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
-  &:focus {
-    border-color: #0070f3;
-    outline: none;
-  }
-`;
-
-const Button = styled.button`
-  padding: 0.75rem;
-  background-color: #0070f3;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-  &:hover {
-    background-color: #005bb5;
-  }
 `;
 
 const ErrorList = styled.ul`
@@ -116,7 +87,7 @@ const RegisterPage = () => {
     <Container>
       <Title>Register</Title>
       <Form onSubmit={handleSubmit}>
-        <Label htmlFor="Name">Name</Label>
+        <Label htmlFor="Name" text="Name"/>
         <Input
           type="text"
           placeholder="Name"
@@ -127,7 +98,7 @@ const RegisterPage = () => {
           }
         />
 
-        <Label htmlFor="lastname">Email</Label>
+        <Label htmlFor="lastname" text="Email"/>
         <Input
           type="email"
           placeholder="Email"
@@ -138,7 +109,7 @@ const RegisterPage = () => {
           }
         />
 
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password" text="Password"/>
         <Input
           type="password"
           placeholder="Password"
@@ -147,7 +118,7 @@ const RegisterPage = () => {
           onChange={(event) => setPassword(event.target.value)}
         />
 
-        <Label htmlFor="avatar">Avatar</Label>
+        <Label htmlFor="avatar" text="Avatar"/>
         <Input
           type="text"
           placeholder="Avatar"

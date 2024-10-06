@@ -6,6 +6,7 @@ import { CardProps } from '../types/productInterface';
 import styled from 'styled-components';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai'; // Usa el corazón relleno para favoritos
 import ModalDetails from "../components/DetailsModal";
+import Button from "./UI/Button/Button"
 import { useState } from 'react';
 
 const CardContainer = styled.div`
@@ -114,8 +115,8 @@ const Card: React.FC<CardProps> = ({ product }) => {
         <ProductTitle>{product.title}</ProductTitle>
         <ProductPrice>${product.price}</ProductPrice>
         <ButtonContainer>
-          <AddToCartButton onClick={handleAddToCart}>Agregar al carrito</AddToCartButton>
-          <ViewDetailsButton onClick={handleViewDetails}>Ver detalles</ViewDetailsButton>
+          <Button onClick={handleAddToCart} label="Agregar"/>
+          <Button onClick={handleViewDetails} label="Ver detalles"/>
 
           {/* Alterna entre los íconos de corazón según el estado */}
           <FavoriteIcon onClick={handleAddToFavorites}>

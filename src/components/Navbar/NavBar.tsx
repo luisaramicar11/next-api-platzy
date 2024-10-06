@@ -1,49 +1,65 @@
 "use client";
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../app/redux/store';
+import { RootState } from '../../app/redux/store';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { useTranslations } from 'next-intl';
 import SelectLanguage from '@/components/UI/SelectLanguage/SelectLanguage';
-import CartModal from '../components/CardModal';
+import CartModal from '../CardModal';
 
 const NavbarContainer = styled.nav`
-  background-color: #343a40;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
   padding: 1rem;
 `;
 
 const Container = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const NavLink = styled(Link)`
-  color: #fff;
-  background-color: #007bff;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
+  color: #333;
   text-decoration: none;
-  font-size: 0.875rem;
-  margin-right: 0.5rem;
+  margin-right: 1rem;
+  font-size: 1rem;
+  transition: color 0.3s ease;
 
   &:hover {
-    background-color: #0056b3;
+    color: #007bff;
+  }
+
+  @media (max-width: 768px) {
+    margin: 0.5rem 0;
   }
 `;
 
 const SignoutButton = styled.button`
-  color: #fff;
-  background-color: #dc3545;
-  padding: 0.5rem 1rem;
+  background: none;
   border: none;
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #333;
+  font-size: 1rem;
+  margin-left: 1rem;
 
   &:hover {
-    background-color: #c82333;
+    color: #007bff;
+  }
+
+  @media (max-width: 768px) {
+    margin: 0.5rem 0;
   }
 `;
 
@@ -81,9 +97,12 @@ const Navbar = () => {
             <FavoritesLink href="/favorites">
           Favoritos ({favoriteCount})
         </FavoritesLink>
-            <SignoutButton onClick={() => signOut()}>Signout</SignoutButton>
+        <FavoritesLink href="/products">
+          Productos
+        </FavoritesLink>
             <NavLink href="#" onClick={handleCartClick}>🛒 Carrito ({cartItems.length})</NavLink>
             <SelectLanguage />
+            <SignoutButton onClick={() => signOut()}>Signout</SignoutButton>
           </>
         ) : (
           <>

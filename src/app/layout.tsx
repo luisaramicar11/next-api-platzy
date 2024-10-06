@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import Navbar from "@/components/NavBar";
+import Navbar from "@/components/Navbar/NavBar";
 import { Providers } from './Providers';
 import SessionAuthProvider from "@/context/SessionAuthProvider";
 import { NextIntlClientProvider } from 'next-intl';

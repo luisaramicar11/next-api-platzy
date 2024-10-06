@@ -2,6 +2,11 @@
 import { NextResponse } from 'next/server';
 import { IProduct } from '../../../types/productInterface';
 
+export interface IResponse<T> {
+  status: number;         // Código de estado HTTP
+  data?: T;              // Datos devueltos (puede ser un array de productos, etc.)
+  error?: string;        // Mensaje de error (opcional)
+}
 // Simulando una base de datos o llamando a un backend externo
 // Esta función puede reemplazarse con la lógica que llame a tu base de datos o servicio
 async function fetchProductsFromBackend(token: string): Promise<IProduct[]> {
@@ -21,18 +26,19 @@ async function fetchProductsFromBackend(token: string): Promise<IProduct[]> {
 }
 
 // Función para manejar la petición GET (Obtener productos)
-export async function GET(request: Request) {
+// Función para manejar la petición GET (Obtener productos)
+export async function GET(request: Request): Promise<IResponse<IProduct[]>> {
   const token = request.headers.get('authorization')?.replace('Bearer ', '');
 
   if (!token) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    return NextResponse.json({ status: 401, error: 'No autorizado' });
   }
 
   try {
     const products: IProduct[] = await fetchProductsFromBackend(token);
-    return NextResponse.json(products, { status: 200 });
+    return NextResponse.json({ status: 200, data: products }); // Usando la interfaz
   } catch (error) {
-    return NextResponse.json({ error: 'Error al obtener los productos' }, { status: 500 });
+    return NextResponse.json({ status: 500, error: 'Error al obtener los productos' });
   }
 }
 
@@ -59,12 +65,13 @@ export async function POST(request: Request) {
 
     if (!res.ok) {
       const errorData = await res.json();
-      return NextResponse.json({ error: errorData.message || 'Error al agregar el producto' }, { status: res.status });
+      return NextResponse.json({ status: res.status, error: errorData.message || 'Error al agregar el producto'  });
     }
 
     const createdProduct: IProduct = await res.json();
-    return NextResponse.json(createdProduct, { status: 201 });
+    console.log(createdProduct)
+    return NextResponse.json( { status: 201, data: createdProduct });
   } catch (error) {
-    return NextResponse.json({ error: 'Error al agregar el producto' }, { status: 500 });
+    return NextResponse.json({ status: 500, error: 'Error al agregar el producto'});
   }
 }

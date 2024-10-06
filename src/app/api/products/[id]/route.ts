@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import { IProduct } from '../../../../types/productInterface';
+import { IResponse } from '../../../../types/productInterface'; // Asegúrate de importar la interfaz
 
 // Obtener producto por ID
-export async function GETBYID(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: { id: string } }): Promise<IResponse<IProduct>> {
     const token: string | null = request.headers.get('Authorization');
 
     // Verifica si el token está presente
     if (!token) {
-        return NextResponse.json({ error: 'Authorization token is missing' }, { status: 401 });
+        return NextResponse.json({ status: 401, error: 'Authorization token is missing' });
     }
 
     const { id } = params;
@@ -15,7 +16,7 @@ export async function GETBYID(request: Request, { params }: { params: { id: stri
 
     // Manejo de errores de la conversión del ID
     if (isNaN(idNumber)) {
-        return NextResponse.json({ error: 'Invalid product ID' }, { status: 400 });
+        return NextResponse.json({ status: 400, error: 'Invalid product ID' });
     }
 
     try {
@@ -29,32 +30,32 @@ export async function GETBYID(request: Request, { params }: { params: { id: stri
 
         // Manejo de la respuesta
         if (!response.ok) {
-            const errorData = await response.json();
-            return NextResponse.json({ error: errorData.message || 'Failed to fetch product' }, { status: response.status });
+            const errorData: { message?: string } = await response.json();
+            return NextResponse.json({ status: response.status, error: errorData.message || 'Failed to fetch product' });
         }
 
         const data: IProduct = await response.json();
-        return NextResponse.json(data, { status: response.status });
+        return NextResponse.json({ status: 200, data }); // Ajuste a la interfaz
     } catch (error: unknown) {
         console.error('Error fetching product:', error);
-        return NextResponse.json({ error: 'An unexpected error occurred' }, { status: 500 });
+        return NextResponse.json({ status: 500, error: 'An unexpected error occurred' });
     }
 }
 
 // Actualizar producto
-export async function UPDATE(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: { id: string } }): Promise<IResponse<IProduct>> {
     const token: string | null = request.headers.get('Authorization');
 
     // Verifica si el token está presente
     if (!token) {
-        return NextResponse.json({ error: 'Authorization token is missing' }, { status: 401 });
+        return NextResponse.json({ status: 401, error: 'Authorization token is missing' });
     }
 
     const { id } = params;
     const idNumber: number = parseInt(id, 10);
 
     if (isNaN(idNumber)) {
-        return NextResponse.json({ error: 'Invalid product ID' }, { status: 400 });
+        return NextResponse.json({ status: 400, error: 'Invalid product ID' });
     }
 
     try {
@@ -69,33 +70,35 @@ export async function UPDATE(request: Request, { params }: { params: { id: strin
             body: JSON.stringify(productData),
         });
 
+        console.log(response)
+
         if (!response.ok) {
-            const errorData = await response.json();
-            return NextResponse.json({ error: errorData.message || 'Failed to update product' }, { status: response.status });
+            const errorData: { message?: string } = await response.json();
+            return NextResponse.json({ status: response.status, error: errorData.message || 'Failed to update product' });
         }
 
         const updatedProduct: IProduct = await response.json();
-        return NextResponse.json(updatedProduct, { status: response.status });
+        return NextResponse.json({ status: 200, data: updatedProduct }); // Ajuste a la interfaz
     } catch (error: unknown) {
         console.error('Error updating product:', error);
-        return NextResponse.json({ error: 'An unexpected error occurred' }, { status: 500 });
+        return NextResponse.json({ status: 500, error: 'An unexpected error occurred' });
     }
 }
 
 // Eliminar producto
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: { id: string } }): Promise<IResponse<null>> {
     const token: string | null = request.headers.get('Authorization');
 
     // Verifica si el token está presente
     if (!token) {
-        return NextResponse.json({ error: 'Authorization token is missing' }, { status: 401 });
+        return NextResponse.json({ status: 401, error: 'Authorization token is missing' });
     }
 
     const { id } = params;
     const idNumber: number = parseInt(id, 10);
 
     if (isNaN(idNumber)) {
-        return NextResponse.json({ error: 'Invalid product ID' }, { status: 400 });
+        return NextResponse.json({ status: 400, error: 'Invalid product ID' });
     }
 
     try {
@@ -107,13 +110,13 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
         });
 
         if (!response.ok) {
-            const errorData = await response.json();
-            return NextResponse.json({ error: errorData.message || 'Failed to delete product' }, { status: response.status });
+            const errorData: { message?: string } = await response.json();
+            return NextResponse.json({ status: response.status, error: errorData.message || 'Failed to delete product' });
         }
 
-        return NextResponse.json({ message: 'Product deleted successfully' }, { status: 200 });
+        return NextResponse.json({ status: 200, data: null }); // Ajuste a la interfaz
     } catch (error: unknown) {
         console.error('Error deleting product:', error);
-        return NextResponse.json({ error: 'An unexpected error occurred' }, { status: 500 });
+        return NextResponse.json({ status: 500, error: 'An unexpected error occurred' });
     }
 }
