@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import cartReducer from './slices/cartSlice';
 import { createWrapper } from 'next-redux-wrapper';
 import { IProduct } from '../../types/productInterface';
+import favoritesReducer from './slices/favoritesSlice';
 
 // Interfaz del estado del carrito
 interface CartState {
@@ -16,17 +17,20 @@ interface CartState {
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['items'], // Solo persistimos los items del carrito
+  whitelist: ['items'], // Añadimos totalQuantity y totalPrice
 };
+
 
 // Reducer persistido
 const persistedReducer = persistReducer(persistConfig, cartReducer);
+const persistedReducerFavorites = persistReducer(persistConfig, favoritesReducer);
 
 // Función para crear la store
 export const createStore = () =>
   configureStore({
     reducer: {
       cart: persistedReducer,
+      favorites: persistedReducerFavorites,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
@@ -35,9 +39,9 @@ export const createStore = () =>
   });
 
 // Tipos para TypeScript
-export type AppStore = ReturnType<typeof createStore>; // Tipo para la tienda
-export type RootState = ReturnType<AppStore['getState']>; // Tipo para el estado global
-export type AppDispatch = AppStore['dispatch']; // Tipo para el dispatch
+export type AppStore = typeof store;
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
 // Creación del wrapper para Next.js
 export const wrapper = createWrapper<AppStore>(createStore);

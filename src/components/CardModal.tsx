@@ -1,8 +1,7 @@
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { RootState } from '../app/redux/store';
-import { clearCart } from '../app/redux/slices/cartSlice';
+import { clearCart, removeItem } from '../app/redux/slices/cartSlice';
 import { CartItem } from '../app/redux/slices/cartSlice';
 
 const ModalOverlay = styled.div`
@@ -43,12 +42,26 @@ const CloseButton = styled.button`
 const CartItemContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin: 10px 0;
 `;
 
 const TotalPrice = styled.p`
   font-weight: bold;
   margin-top: 20px;
+`;
+
+const RemoveButton = styled.button`
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+
+  &:hover {
+    background: #c82333;
+  }
 `;
 
 interface CartModalProps {
@@ -59,6 +72,11 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const totalPrice = useSelector((state: RootState) => state.cart.totalPrice);
+
+  // Función para eliminar un artículo del carrito
+  const handleRemoveItem = (id: number) => {
+    dispatch(removeItem(id));
+  };
 
   const handleClearCart = () => {
     dispatch(clearCart());
@@ -74,6 +92,10 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
             <CartItemContainer key={item.id}>
               <span>{item.title} (x{item.quantity})</span>
               <span>${item.price * item.quantity}</span>
+              {/* Botón para eliminar artículo */}
+              <RemoveButton onClick={() => handleRemoveItem(item.id)}>
+                Eliminar
+              </RemoveButton>
             </CartItemContainer>
           ))
         ) : (
@@ -90,3 +112,4 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
 };
 
 export default CartModal;
+

@@ -1,11 +1,12 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '../app/redux/slices/cartSlice';
+import { addFavorite, removeFavorite } from '../app/redux/slices/favoritesSlice';
+import { RootState, AppDispatch } from '../app/redux/store';
 import { CardProps } from '../types/productInterface';
 import styled from 'styled-components';
-import { AppDispatch } from '../app/redux/store';
-import { AiOutlineHeart } from 'react-icons/ai'; 
+import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai'; // Usa el corazón relleno para favoritos
 import ModalDetails from "../components/DetailsModal";
-import { useState } from 'react'; // Asegúrate de importar useState
+import { useState } from 'react';
 
 const CardContainer = styled.div`
   border: 1px solid #e0e0e0;
@@ -71,32 +72,35 @@ const ViewDetailsButton = styled.button`
   }
 `;
 
-const FavoriteIcon = styled(AiOutlineHeart)`
-  color: #ff0000;
+// Botón de favorito, que alterna entre vacío y relleno
+const FavoriteIcon = styled.div`
   cursor: pointer;
   font-size: 24px;
-
-  &:hover {
-    color: #cc0000;
-  }
 `;
 
 const Card: React.FC<CardProps> = ({ product }) => {
   const dispatch: AppDispatch = useDispatch();
   const [isModalOpen, setModalOpen] = useState(false); // Estado para controlar el modal
-  const [selectedProduct, setSelectedProduct] = useState(product); // Estado para almacenar el producto seleccionado
+
+  // Revisa si el producto ya está en favoritos
+  const isFavorite = useSelector((state: RootState) => 
+    state.favorites.items.some((item) => item.id === product.id)
+  );
 
   const handleAddToCart = () => {
     dispatch(addItem(product));
   };
 
   const handleViewDetails = () => {
-    setSelectedProduct(product); // Establece el producto seleccionado
     setModalOpen(true); // Abre el modal
   };
 
   const handleAddToFavorites = () => {
-    console.log('Añadido a favoritos');
+    if (isFavorite) {
+      dispatch(removeFavorite(product.id));
+    } else {
+      dispatch(addFavorite(product));
+    }
   };
 
   const handleCloseModal = () => {
@@ -112,7 +116,11 @@ const Card: React.FC<CardProps> = ({ product }) => {
         <ButtonContainer>
           <AddToCartButton onClick={handleAddToCart}>Agregar al carrito</AddToCartButton>
           <ViewDetailsButton onClick={handleViewDetails}>Ver detalles</ViewDetailsButton>
-          <FavoriteIcon onClick={handleAddToFavorites} />
+
+          {/* Alterna entre los íconos de corazón según el estado */}
+          <FavoriteIcon onClick={handleAddToFavorites}>
+            {isFavorite ? <AiFillHeart color="#ff0000" /> : <AiOutlineHeart color="#ff0000" />}
+          </FavoriteIcon>
         </ButtonContainer>
       </CardContainer>
 
@@ -120,11 +128,10 @@ const Card: React.FC<CardProps> = ({ product }) => {
       <ModalDetails 
         isOpen={isModalOpen} 
         onClose={handleCloseModal} 
-        product={selectedProduct} 
+        product={product} 
       />
     </>
   );
 };
 
 export default Card;
-

@@ -47,11 +47,18 @@ const SignoutButton = styled.button`
   }
 `;
 
+const FavoritesLink = styled(Link)`
+  margin-left: 20px;
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+`;
+
 const Navbar = () => {
   const { data: session } = useSession();
   const traduction = useTranslations('Navbar');
   const cartItems = useSelector((state: RootState) => state.cart.items);
-
+  const favoriteCount = useSelector((state: RootState) => state.favorites.items.length);
   // Estado para el modal
   const [isCartModalOpen, setCartModalOpen] = useState(false);
 
@@ -71,6 +78,9 @@ const Navbar = () => {
         {session?.user ? (
           <>
             <NavLink href="/dashboard">Dashboard</NavLink>
+            <FavoritesLink href="/favorites">
+          Favoritos ({favoriteCount})
+        </FavoritesLink>
             <SignoutButton onClick={() => signOut()}>Signout</SignoutButton>
             <NavLink href="#" onClick={handleCartClick}>🛒 Carrito ({cartItems.length})</NavLink>
             <SelectLanguage />
